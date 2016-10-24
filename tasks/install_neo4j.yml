@@ -30,6 +30,14 @@
     - /var/log/neo4j
   when: neo4j_uid
 
+- name: configure Neo4j remote client accepts any connection
+  lineinfile:
+    dest: "/etc/neo4j/neo4j.conf"
+    regexp: "dbms.connector.http.address="
+    line: "dbms.connector.http.address=0.0.0.0:{{ neo4j_server_webserver_port }}"
+    state: present
+  when: neo4j_accept_any_connection
+
 - name: configure Neo4j properties
   template: src=neo4j.properties dest=/etc/neo4j/neo4j.properties owner=neo4j group=adm mode=0644
   notify: restart neo4j
