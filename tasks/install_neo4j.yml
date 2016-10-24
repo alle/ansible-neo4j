@@ -38,6 +38,14 @@
     state: present
   when: neo4j_accept_any_connection
 
+- name: disable Neo4j authentication
+  lineinfile:
+    dest: "/etc/neo4j/neo4j.conf"
+    regexp: "dbms.security.auth_enabled="
+    line: "dbms.security.auth_enabled=false"
+    state: present
+  when: neo4j_disable_auth
+
 - name: configure Neo4j properties
   template: src=neo4j.properties dest=/etc/neo4j/neo4j.properties owner=neo4j group=adm mode=0644
   notify: restart neo4j
